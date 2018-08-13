@@ -155,4 +155,5 @@ model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler,
 
 # Save model to file
 file_name = 'model_v1.pkl'
-torch.save(model_ft, 'flask_api/models/' + file_name)
+torch.save(model_ft, file_name)
+torch.save(model_ft, 'api/models/' + file_name)
