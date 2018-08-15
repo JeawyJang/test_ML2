@@ -34,7 +34,7 @@ data_transforms = {
 data_dir = 'sakura_full'
 image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x])
                   for x in ['train', 'test']}
-dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=16, shuffle=True, num_workers=4)
+dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=10, shuffle=True, num_workers=4)
               for x in ['train', 'test']}
 dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'test']}
 class_names = image_datasets['train'].classes
@@ -110,7 +110,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=10):
     return model
 
 
-def visualize_model(model, num_images=6):
+def visualize_model(model, num_images=20):
     was_training = model.training
     model.eval()
     images_so_far = 0
@@ -139,7 +139,7 @@ def visualize_model(model, num_images=6):
 
 model_ft = models.resnet50(pretrained=True)
 num_ftrs = model_ft.fc.in_features
-model_ft.fc = nn.Linear(num_ftrs, 4)
+model_ft.fc = nn.Linear(num_ftrs, 6)
 
 model_ft = model_ft.to(device)
 
@@ -151,7 +151,7 @@ optimizer_ft = optim.SGD(model_ft.parameters(), lr=0.001, momentum=0.9)
 # Decay LR by a factor of 0.1 every 7 epochs
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
 model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler,
-                       num_epochs=10)
+                       num_epochs=20)
 
 # Save model to file
 file_name = 'model_v1.pkl'
